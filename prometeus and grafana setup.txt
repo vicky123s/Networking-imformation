@@ -1,0 +1,60 @@
+
+prometeus and grafana setup
+
+notes:- 
+
+matrics => that matrics means monitoring of health check (cpu usages, network, memory and more)
+logs => check logs of application (logs, error showing)
+traces => if we got any error so that error reason how (that showing in tracing)
+
+monitoring application :- 1) Prometheus => cpu usage, RAM, memory is given
+			  2) Grafana => for showing all data of prmetheus used grafana dashboard
+
+for logs checking application :- 1) Loki
+				 2) Promtail
+
+for traces checking application :- 1) jaegar
+				   2) Opentelemetry
+
+processing to run project 
+
+step 1) install helm
+	>> curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+	>> chmod 700 get_helm.sh
+	>> ./get_helm.sh
+	>> helm version
+
+step 2) create monitoring folder and down
+	>> mkdir monitoring
+	>> cd monitoring
+
+step 3) create namespace of working environment to k8s
+	>>kubectl create ns monitoring
+
+step 4) in that monitoring folder add prometheus-community-helm-chart
+	>> helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+step 5) for checking helm repository list
+	>> helm repo list
+
+step 6) updating helm repository with latest
+	>> helm repo update
+
+step 7) need to installing prometheus stack through helm with prometheus-community
+	>> helm install promotheus-stack prometheus-community/kube-prometheus-stack --namespace monitoring --set prometheus.service.nodePort=30000 --set grafana.service.nodePort=31000 --set grafana.service.type=NodePort --set prometheus.service.type=NodePort
+
+step 8) check pods and services are created or not
+	>> kubectl get po -n monitoring
+	>> kubectl get svc -n monitoring
+
+step 9) for running prometheus in web-browser need to port forward
+	>> kubectl port-forward svc/promotheus-stack-kube-prom-prometheus 9090:9090 -n monitoring --address=0.0.0.0 &
+
+step 10) add forwarded port No: 9090 in EC2-security group and check with web-browser prometheus are working or not
+
+step 11) same port forward for the grafana service and checking with web browser
+	>> kubectl port-forward svc/promotheus-stack-grafana 3000:80 -n monitoring --address=0.0.0.0 &
+
+step 12) for login to grafana need to password
+	>> kubectl get secret promotheus-stack-grafana -n monitoring -o jsonpath="{.data.admin-password}"
+
