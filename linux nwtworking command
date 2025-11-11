@@ -1,0 +1,12 @@
+1) for networking status checking 		:- netstat or ss
+2) for checking ip address details		:- ipconfig
+3) 						:- ifconfig
+4) for tracking hopping route of any website	:- traceroute <site_domain_name or ip_address>
+5) for checking path of any website		:- tarcepath <site_domain_name or ip_address>
+6) for livetracking website and path of hopping	:- mtr <site_domain_name or ip_address>
+7) for checking connectivity of wireless network:- iwconfig
+8) for checking any website ip address and details :- dig <site_domain_name or ip_address>
+9) for checking total information of site with domain name buying site	:- whois <site_domain_name or ip_address>
+10) for checking plugin status for network	:- ifplugstatus
+11) for checking route table of linux network connection :- route
+12) for checking ip address tables	 iptables
